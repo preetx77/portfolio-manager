@@ -173,9 +173,218 @@ with st.sidebar:
             st.info("Create a portfolio first.")
 
 # ---------- Tabs ----------
-tab_portfolios, tab_trade, tab_live, tab_report, tab_about = st.tabs([
-    "Portfolios", "Trade (Buy/Sell)", "Live Market", "Reports", "About"
+tab_home, tab_portfolios, tab_trade, tab_live, tab_report, tab_about = st.tabs([
+    "🏠 Home", "📊 Portfolios", "💹 Trade", "📈 Live Market", "📄 Reports", "ℹ️ About"
 ])
+
+# ----- Home Tab -----
+with tab_home:
+    # Hero Section
+    st.markdown("""
+    <div class='glass' style='text-align: center; padding: 40px 20px; margin-bottom: 30px;'>
+        <h1 class='title' style='font-size: 3.5rem; margin-bottom: 20px;'>
+            🚀 Portfolio Tracker
+        </h1>
+        <p style='font-size: 1.3rem; color: #94a3b8; margin-bottom: 30px; line-height: 1.6;'>
+            Advanced portfolio management with real-time analytics, AI-powered insights, and futuristic design
+        </p>
+        <div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;'>
+            <div style='background: linear-gradient(45deg, #22d3ee, #a78bfa); padding: 2px; border-radius: 12px;'>
+                <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
+                    ⚡ Real-time Data
+                </div>
+            </div>
+            <div style='background: linear-gradient(45deg, #a78bfa, #60a5fa); padding: 2px; border-radius: 12px;'>
+                <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
+                    📊 Advanced Analytics
+                </div>
+            </div>
+            <div style='background: linear-gradient(45deg, #60a5fa, #34d399); padding: 2px; border-radius: 12px;'>
+                <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
+                    🎨 Futuristic UI
+                </div>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Quick Stats Dashboard
+    col1, col2, col3, col4 = st.columns(4)
+    
+    with col1:
+        st.markdown("""
+        <div class='glass' style='text-align: center; padding: 25px;'>
+            <div style='font-size: 2.5rem; margin-bottom: 10px;'>💼</div>
+            <h3 style='color: #22d3ee; margin: 0;'>{}</h3>
+            <p style='color: #94a3b8; margin: 5px 0 0 0;'>Active Portfolios</p>
+        </div>
+        """.format(total_portfolios), unsafe_allow_html=True)
+    
+    with col2:
+        st.markdown("""
+        <div class='glass' style='text-align: center; padding: 25px;'>
+            <div style='font-size: 2.5rem; margin-bottom: 10px;'>📈</div>
+            <h3 style='color: #a78bfa; margin: 0;'>{}</h3>
+            <p style='color: #94a3b8; margin: 5px 0 0 0;'>Total Positions</p>
+        </div>
+        """.format(total_positions), unsafe_allow_html=True)
+    
+    with col3:
+        st.markdown("""
+        <div class='glass' style='text-align: center; padding: 25px;'>
+            <div style='font-size: 2.5rem; margin-bottom: 10px;'>💰</div>
+            <h3 style='color: #34d399; margin: 0;'>${:,.0f}</h3>
+            <p style='color: #94a3b8; margin: 5px 0 0 0;'>Total Value</p>
+        </div>
+        """.format(total_value), unsafe_allow_html=True)
+    
+    with col4:
+        active_user = st.session_state.get("username", "default")
+        st.markdown("""
+        <div class='glass' style='text-align: center; padding: 25px;'>
+            <div style='font-size: 2.5rem; margin-bottom: 10px;'>👤</div>
+            <h3 style='color: #60a5fa; margin: 0;'>{}</h3>
+            <p style='color: #94a3b8; margin: 5px 0 0 0;'>Active Profile</p>
+        </div>
+        """.format(active_user.title()), unsafe_allow_html=True)
+    
+    st.write("")
+    
+    # Features Showcase
+    st.markdown("""
+    <div class='glass' style='padding: 30px;'>
+        <h2 class='title' style='text-align: center; margin-bottom: 40px; font-size: 2.2rem;'>
+            🌟 Platform Features
+        </h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Feature Cards
+    feat_col1, feat_col2 = st.columns(2)
+    
+    with feat_col1:
+        st.markdown("""
+        <div class='glass' style='padding: 30px; margin-bottom: 20px; height: 280px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
+                <div style='font-size: 3rem; margin-right: 20px;'>📊</div>
+                <div>
+                    <h3 style='color: #22d3ee; margin: 0;'>Portfolio Management</h3>
+                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Advanced Analytics</p>
+                </div>
+            </div>
+            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+                <li>🔹 Multi-portfolio tracking</li>
+                <li>🔹 Real-time position monitoring</li>
+                <li>🔹 Interactive pie & bar charts</li>
+                <li>🔹 Performance metrics</li>
+                <li>🔹 Allocation analysis</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class='glass' style='padding: 30px; height: 280px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
+                <div style='font-size: 3rem; margin-right: 20px;'>📈</div>
+                <div>
+                    <h3 style='color: #a78bfa; margin: 0;'>Live Market Data</h3>
+                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Real-time Trading</p>
+                </div>
+            </div>
+            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+                <li>🔹 TradingView-style charts</li>
+                <li>🔹 Multiple timeframes</li>
+                <li>🔹 Live price updates</li>
+                <li>🔹 Quick trade execution</li>
+                <li>🔹 Market statistics</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with feat_col2:
+        st.markdown("""
+        <div class='glass' style='padding: 30px; margin-bottom: 20px; height: 280px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
+                <div style='font-size: 3rem; margin-right: 20px;'>💹</div>
+                <div>
+                    <h3 style='color: #34d399; margin: 0;'>Trading Platform</h3>
+                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Buy & Sell Stocks</p>
+                </div>
+            </div>
+            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+                <li>🔹 Instant buy/sell orders</li>
+                <li>🔹 Custom price execution</li>
+                <li>🔹 Transaction history</li>
+                <li>🔹 Portfolio rebalancing</li>
+                <li>🔹 Risk management</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        st.markdown("""
+        <div class='glass' style='padding: 30px; height: 280px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
+                <div style='font-size: 3rem; margin-right: 20px;'>📄</div>
+                <div>
+                    <h3 style='color: #60a5fa; margin: 0;'>Smart Reports</h3>
+                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>AI-Powered Insights</p>
+                </div>
+            </div>
+            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+                <li>🔹 Automated report generation</li>
+                <li>🔹 Performance analysis</li>
+                <li>🔹 Risk assessment</li>
+                <li>🔹 Export capabilities</li>
+                <li>🔹 Custom formatting</li>
+            </ul>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.write("")
+    
+    # Quick Actions
+    st.markdown("""
+    <div class='glass' style='padding: 30px; text-align: center;'>
+        <h3 class='title' style='margin-bottom: 30px; font-size: 1.8rem;'>🚀 Quick Actions</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    action_col1, action_col2, action_col3, action_col4 = st.columns(4)
+    
+    with action_col1:
+        if st.button("📊 View Portfolios", use_container_width=True, key="home_portfolios"):
+            st.session_state.active_tab = "portfolios"
+            st.rerun()
+    
+    with action_col2:
+        if st.button("💹 Start Trading", use_container_width=True, key="home_trade"):
+            st.session_state.active_tab = "trade"
+            st.rerun()
+    
+    with action_col3:
+        if st.button("📈 Live Market", use_container_width=True, key="home_market"):
+            st.session_state.active_tab = "live"
+            st.rerun()
+    
+    with action_col4:
+        if st.button("📄 Generate Report", use_container_width=True, key="home_report"):
+            st.session_state.active_tab = "report"
+            st.rerun()
+    
+    # Technology Stack
+    st.write("")
+    st.markdown("""
+    <div class='glass' style='padding: 25px; text-align: center;'>
+        <h4 style='color: #94a3b8; margin-bottom: 20px;'>Powered by Advanced Technology</h4>
+        <div style='display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;'>
+            <span style='color: #22d3ee;'>🐍 Python</span>
+            <span style='color: #a78bfa;'>📊 Streamlit</span>
+            <span style='color: #34d399;'>📈 Plotly</span>
+            <span style='color: #60a5fa;'>💾 SQLite</span>
+            <span style='color: #f59e0b;'>📡 yfinance</span>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
 
 # ----- Portfolios Tab -----
 with tab_portfolios:
