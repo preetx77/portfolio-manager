@@ -264,78 +264,74 @@ with tab_home:
     
     with feat_col1:
         st.markdown("""
-        <div class='glass' style='padding: 30px; margin-bottom: 20px; height: 280px;'>
-            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
-                <div style='font-size: 3rem; margin-right: 20px;'>📊</div>
+        <div class='glass' style='padding: 15px; margin-bottom: 15px; height: 180px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <div style='font-size: 2rem; margin-right: 12px;'>📊</div>
                 <div>
-                    <h3 style='color: #22d3ee; margin: 0;'>Portfolio Management</h3>
-                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Advanced Analytics</p>
+                    <h4 style='color: #22d3ee; margin: 0; font-size: 0.9rem;'>Portfolio Management</h4>
+                    <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.7rem;'>Advanced Analytics</p>
                 </div>
             </div>
-            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+            <ul style='color: #e5e7eb; line-height: 1.4; list-style: none; padding: 0; font-size: 0.75rem;'>
                 <li>🔹 Multi-portfolio tracking</li>
-                <li>🔹 Real-time position monitoring</li>
-                <li>🔹 Interactive pie & bar charts</li>
+                <li>🔹 Real-time monitoring</li>
+                <li>🔹 Interactive charts</li>
                 <li>🔹 Performance metrics</li>
-                <li>🔹 Allocation analysis</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class='glass' style='padding: 30px; height: 280px;'>
-            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
-                <div style='font-size: 3rem; margin-right: 20px;'>📈</div>
+        <div class='glass' style='padding: 15px; height: 180px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <div style='font-size: 2rem; margin-right: 12px;'>📈</div>
                 <div>
-                    <h3 style='color: #a78bfa; margin: 0;'>Live Market Data</h3>
-                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Real-time Trading</p>
+                    <h4 style='color: #a78bfa; margin: 0; font-size: 0.9rem;'>Live Market Data</h4>
+                    <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.7rem;'>Real-time Trading</p>
                 </div>
             </div>
-            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
-                <li>🔹 TradingView-style charts</li>
+            <ul style='color: #e5e7eb; line-height: 1.4; list-style: none; padding: 0; font-size: 0.75rem;'>
+                <li>🔹 TradingView charts</li>
                 <li>🔹 Multiple timeframes</li>
                 <li>🔹 Live price updates</li>
-                <li>🔹 Quick trade execution</li>
-                <li>🔹 Market statistics</li>
+                <li>🔹 Quick execution</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
     
     with feat_col2:
         st.markdown("""
-        <div class='glass' style='padding: 30px; margin-bottom: 20px; height: 280px;'>
-            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
-                <div style='font-size: 3rem; margin-right: 20px;'>💹</div>
+        <div class='glass' style='padding: 15px; margin-bottom: 15px; height: 180px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <div style='font-size: 2rem; margin-right: 12px;'>💹</div>
                 <div>
-                    <h3 style='color: #34d399; margin: 0;'>Trading Platform</h3>
-                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>Buy & Sell Stocks</p>
+                    <h4 style='color: #34d399; margin: 0; font-size: 0.9rem;'>Trading Platform</h4>
+                    <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.7rem;'>Buy & Sell Stocks</p>
                 </div>
             </div>
-            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
+            <ul style='color: #e5e7eb; line-height: 1.4; list-style: none; padding: 0; font-size: 0.75rem;'>
                 <li>🔹 Instant buy/sell orders</li>
                 <li>🔹 Custom price execution</li>
                 <li>🔹 Transaction history</li>
                 <li>🔹 Portfolio rebalancing</li>
-                <li>🔹 Risk management</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
         
         st.markdown("""
-        <div class='glass' style='padding: 30px; height: 280px;'>
-            <div style='display: flex; align-items: center; margin-bottom: 20px;'>
-                <div style='font-size: 3rem; margin-right: 20px;'>📄</div>
+        <div class='glass' style='padding: 15px; height: 180px;'>
+            <div style='display: flex; align-items: center; margin-bottom: 12px;'>
+                <div style='font-size: 2rem; margin-right: 12px;'>📄</div>
                 <div>
-                    <h3 style='color: #60a5fa; margin: 0;'>Smart Reports</h3>
-                    <p style='color: #94a3b8; margin: 5px 0 0 0;'>AI-Powered Insights</p>
+                    <h4 style='color: #60a5fa; margin: 0; font-size: 0.9rem;'>Smart Reports</h4>
+                    <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.7rem;'>AI-Powered Insights</p>
                 </div>
             </div>
-            <ul style='color: #e5e7eb; line-height: 1.8; list-style: none; padding: 0;'>
-                <li>🔹 Automated report generation</li>
+            <ul style='color: #e5e7eb; line-height: 1.4; list-style: none; padding: 0; font-size: 0.75rem;'>
+                <li>🔹 Automated generation</li>
                 <li>🔹 Performance analysis</li>
                 <li>🔹 Risk assessment</li>
                 <li>🔹 Export capabilities</li>
-                <li>🔹 Custom formatting</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
@@ -500,7 +496,9 @@ with tab_portfolios:
                         pie_fig.update_layout(
                             showlegend=True,
                             legend=dict(orientation="v", yanchor="middle", y=0.5),
-                            margin=dict(l=20, r=20, t=40, b=20)
+                            margin=dict(l=20, r=20, t=40, b=20),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            font_color='white'
                         )
                         st.plotly_chart(pie_fig, use_container_width=True)
                     
@@ -522,22 +520,30 @@ with tab_portfolios:
                             showlegend=False,
                             margin=dict(l=20, r=20, t=40, b=20),
                             yaxis_title="Value ($)",
-                            xaxis_title="Symbol"
+                            xaxis_title="Symbol",
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            font_color='white'
                         )
                         st.plotly_chart(bar_fig, use_container_width=True)
                     
                     # Performance Summary
                     st.markdown("### 📈 Performance Summary")
-                    perf_cols = st.columns(len(labels))
-                    
-                    for i, (symbol, value) in enumerate(zip(labels, values)):
-                        with perf_cols[i]:
-                            pct = (value / sum(values) * 100) if sum(values) > 0 else 0
-                            st.metric(
-                                label=symbol,
-                                value=f"${value:,.2f}",
-                                delta=f"{pct:.1f}% of portfolio"
-                            )
+                    # Limit to maximum 6 columns to prevent layout issues
+                    max_cols = min(len(labels), 6)
+                    if max_cols > 0:
+                        perf_cols = st.columns(max_cols)
+                        
+                        for i, (symbol, value) in enumerate(zip(labels[:max_cols], values[:max_cols])):
+                            with perf_cols[i]:
+                                pct = (value / sum(values) * 100) if sum(values) > 0 else 0
+                                st.metric(
+                                    label=symbol,
+                                    value=f"${value:,.2f}",
+                                    delta=f"{pct:.1f}% of portfolio"
+                                )
+                        
+                        if len(labels) > 6:
+                            st.info(f"Showing top {max_cols} positions. Total positions: {len(labels)}")
                 else:
                     st.info("Add some stocks to see colorful charts!")
             else:
@@ -600,22 +606,55 @@ with tab_live:
 
     if go_btn and sym_input.strip():
         try:
-            tickers = [s.strip().upper() for s in sym_input.split(",") if s.strip()]
-            data = yf.download(tickers=tickers, period=period, interval=interval, group_by='ticker', auto_adjust=True, threads=True, progress=False)
+            with st.spinner("Fetching market data..."):
+                tickers = [s.strip().upper() for s in sym_input.split(",") if s.strip()]
+                
+                # Enhanced error handling for data fetching
+                if len(tickers) == 1:
+                    data = yf.download(tickers[0], period=period, interval=interval, auto_adjust=True, progress=False)
+                    if not data.empty:
+                        data = {tickers[0]: data}
+                else:
+                    data = yf.download(tickers=tickers, period=period, interval=interval, group_by='ticker', auto_adjust=True, threads=True, progress=False)
 
             # Build long-form for plotting
             plot_rows = []
             latest_prices = {}
             for t in tickers:
-                df = data[t] if len(tickers) > 1 else data
-                if df is None or df.empty:
+                try:
+                    if len(tickers) == 1:
+                        df = data.get(t, data) if isinstance(data, dict) else data
+                    else:
+                        df = data[t] if t in data.columns.get_level_values(0) else None
+                    
+                    if df is None or df.empty:
+                        st.warning(f"No data available for {t}")
+                        continue
+                        
+                    df = df.dropna()
+                    if df.empty:
+                        st.warning(f"No valid data for {t} after cleaning")
+                        continue
+                        
+                    # Get the close price column
+                    if 'Close' in df.columns:
+                        close_col = df['Close']
+                    elif len(df.columns) > 0:
+                        close_col = df.iloc[:, -1]  # Use last column if Close not found
+                    else:
+                        continue
+                        
+                    latest_prices[t] = float(close_col.iloc[-1])
+                    
+                    for ts, price in close_col.items():
+                        plot_rows.append({
+                            "Datetime": ts, 
+                            "Symbol": t, 
+                            "Close": float(price)
+                        })
+                except Exception as e:
+                    st.error(f"Error processing {t}: {str(e)}")
                     continue
-                df = df.dropna()
-                if df.empty:
-                    continue
-                latest_prices[t] = float(df["Close"].iloc[-1])
-                for ts, row in df.iterrows():
-                    plot_rows.append({"Datetime": ts, "Symbol": t, "Close": float(row["Close"])})
 
             if not plot_rows:
                 st.info("No price data returned for the given inputs.")

@@ -29,6 +29,6 @@ class Transaction:
                 stock = Stock(self.symbol, "Dummy Stock", self.price)
                 portfolio.remove_stock(stock, self.quantity)
             else:
-                print(f"Not enough shares of {self.symbol} to sell.")
+                raise ValueError(f"Not enough shares of {self.symbol} to sell. Available: {current_quantity}, Requested: {self.quantity}")
         else:
-            print(f"No shares of {self.symbol} in portfolio.")
+            raise ValueError(f"No shares of {self.symbol} in portfolio.")

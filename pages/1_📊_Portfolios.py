@@ -162,63 +162,77 @@ else:
             values = [row["Value"] for row in sorted_data]
             
             if labels and values:
-                # Create two columns for pie and bar charts
-                col1, col2 = st.columns(2)
-                
-                with col1:
-                    # Colorful Pie Chart
-                    pie_fig = px.pie(
-                        names=labels,
-                        values=values,
-                        title="Portfolio Allocation",
-                        color_discrete_sequence=px.colors.qualitative.Set3
-                    )
-                    pie_fig.update_traces(
-                        textposition='inside',
-                        textinfo='percent+label',
-                        hovertemplate='<b>%{label}</b><br>Value: $%{value:,.2f}<br>Percent: %{percent}<extra></extra>'
-                    )
-                    pie_fig.update_layout(
-                        showlegend=True,
-                        legend=dict(orientation="v", yanchor="middle", y=0.5),
-                        margin=dict(l=20, r=20, t=40, b=20)
-                    )
-                    st.plotly_chart(pie_fig, use_container_width=True)
-                
-                with col2:
-                    # Colorful Bar Chart
-                    bar_fig = px.bar(
-                        x=labels,
-                        y=values,
-                        title="Position Values",
-                        color=labels,
-                        color_discrete_sequence=px.colors.qualitative.Set2
-                    )
-                    bar_fig.update_traces(
-                        hovertemplate='<b>%{x}</b><br>Value: $%{y:,.2f}<extra></extra>',
-                        texttemplate='$%{y:,.0f}',
-                        textposition='outside'
-                    )
-                    bar_fig.update_layout(
-                        showlegend=False,
-                        margin=dict(l=20, r=20, t=40, b=20),
-                        yaxis_title="Value ($)",
-                        xaxis_title="Symbol"
-                    )
-                    st.plotly_chart(bar_fig, use_container_width=True)
+                try:
+                    # Create two columns for pie and bar charts
+                    col1, col2 = st.columns(2)
+                    
+                    with col1:
+                        # Colorful Pie Chart
+                        pie_fig = px.pie(
+                            names=labels,
+                            values=values,
+                            title="Portfolio Allocation",
+                            color_discrete_sequence=px.colors.qualitative.Set3
+                        )
+                        pie_fig.update_traces(
+                            textposition='inside',
+                            textinfo='percent+label',
+                            hovertemplate='<b>%{label}</b><br>Value: $%{value:,.2f}<br>Percent: %{percent}<extra></extra>'
+                        )
+                        pie_fig.update_layout(
+                            showlegend=True,
+                            legend=dict(orientation="v", yanchor="middle", y=0.5),
+                            margin=dict(l=20, r=20, t=40, b=20),
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            font_color='white'
+                        )
+                        st.plotly_chart(pie_fig, use_container_width=True)
+                    
+                    with col2:
+                        # Colorful Bar Chart
+                        bar_fig = px.bar(
+                            x=labels,
+                            y=values,
+                            title="Position Values",
+                            color=labels,
+                            color_discrete_sequence=px.colors.qualitative.Set2
+                        )
+                        bar_fig.update_traces(
+                            hovertemplate='<b>%{x}</b><br>Value: $%{y:,.2f}<extra></extra>',
+                            texttemplate='$%{y:,.0f}',
+                            textposition='outside'
+                        )
+                        bar_fig.update_layout(
+                            showlegend=False,
+                            margin=dict(l=20, r=20, t=40, b=20),
+                            yaxis_title="Value ($)",
+                            xaxis_title="Symbol",
+                            paper_bgcolor='rgba(0,0,0,0)',
+                            font_color='white'
+                        )
+                        st.plotly_chart(bar_fig, use_container_width=True)
+                except Exception as e:
+                    st.error(f"Chart rendering error: {str(e)}")
+                    st.info("Charts temporarily unavailable. Please try refreshing the page.")
                 
                 # Performance Summary
                 st.markdown("### 📈 Performance Summary")
-                perf_cols = st.columns(len(labels))
-                
-                for i, (symbol, value) in enumerate(zip(labels, values)):
-                    with perf_cols[i]:
-                        pct = (value / sum(values) * 100) if sum(values) > 0 else 0
-                        st.metric(
-                            label=symbol,
-                            value=f"${value:,.2f}",
-                            delta=f"{pct:.1f}% of portfolio"
-                        )
+                # Limit to maximum 6 columns to prevent layout issues
+                max_cols = min(len(labels), 6)
+                if max_cols > 0:
+                    perf_cols = st.columns(max_cols)
+                    
+                    for i, (symbol, value) in enumerate(zip(labels[:max_cols], values[:max_cols])):
+                        with perf_cols[i]:
+                            pct = (value / sum(values) * 100) if sum(values) > 0 else 0
+                            st.metric(
+                                label=symbol,
+                                value=f"${value:,.2f}",
+                                delta=f"{pct:.1f}% of portfolio"
+                            )
+                    
+                    if len(labels) > 6:
+                        st.info(f"Showing top {max_cols} positions. Total positions: {len(labels)}")
             else:
                 st.info("Add some stocks to see colorful charts!")
         else:

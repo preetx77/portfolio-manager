@@ -289,37 +289,37 @@ feat_col1, feat_col2, feat_col3, feat_col4 = st.columns(4)
 
 with feat_col1:
     st.markdown("""
-    <div class='glass' style='padding: 15px; text-align: center; height: 120px;'>
-        <div style='font-size: 2rem; margin-bottom: 8px;'>📊</div>
-        <h4 style='color: #22d3ee; margin: 0; font-size: 0.9rem;'>Portfolio Management</h4>
-        <p style='color: #94a3b8; margin: 5px 0 0 0; font-size: 0.7rem;'>Multi-portfolio tracking & analytics</p>
+    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
+        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📊</div>
+        <h4 style='color: #22d3ee; margin: 0; font-size: 0.8rem;'>Portfolio Management</h4>
+        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Multi-portfolio tracking</p>
     </div>
     """, unsafe_allow_html=True)
 
 with feat_col2:
     st.markdown("""
-    <div class='glass' style='padding: 15px; text-align: center; height: 120px;'>
-        <div style='font-size: 2rem; margin-bottom: 8px;'>💹</div>
-        <h4 style='color: #34d399; margin: 0; font-size: 0.9rem;'>Trading Platform</h4>
-        <p style='color: #94a3b8; margin: 5px 0 0 0; font-size: 0.7rem;'>Buy/sell orders & execution</p>
+    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
+        <div style='font-size: 1.5rem; margin-bottom: 5px;'>💹</div>
+        <h4 style='color: #34d399; margin: 0; font-size: 0.8rem;'>Trading Platform</h4>
+        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Buy/sell execution</p>
     </div>
     """, unsafe_allow_html=True)
 
 with feat_col3:
     st.markdown("""
-    <div class='glass' style='padding: 15px; text-align: center; height: 120px;'>
-        <div style='font-size: 2rem; margin-bottom: 8px;'>📈</div>
-        <h4 style='color: #a78bfa; margin: 0; font-size: 0.9rem;'>Live Market Data</h4>
-        <p style='color: #94a3b8; margin: 5px 0 0 0; font-size: 0.7rem;'>Real-time charts & prices</p>
+    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
+        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📈</div>
+        <h4 style='color: #a78bfa; margin: 0; font-size: 0.8rem;'>Live Market Data</h4>
+        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Real-time charts</p>
     </div>
     """, unsafe_allow_html=True)
 
 with feat_col4:
     st.markdown("""
-    <div class='glass' style='padding: 15px; text-align: center; height: 120px;'>
-        <div style='font-size: 2rem; margin-bottom: 8px;'>📄</div>
-        <h4 style='color: #60a5fa; margin: 0; font-size: 0.9rem;'>Smart Reports</h4>
-        <p style='color: #94a3b8; margin: 5px 0 0 0; font-size: 0.7rem;'>AI-powered insights</p>
+    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
+        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📄</div>
+        <h4 style='color: #60a5fa; margin: 0; font-size: 0.8rem;'>Smart Reports</h4>
+        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>AI-powered insights</p>
     </div>
     """, unsafe_allow_html=True)
 
@@ -385,7 +385,8 @@ if pm.portfolios:
                     plot_bgcolor='rgba(0,0,0,0)',
                     font_color='white',
                     showlegend=True,
-                    margin=dict(l=20, r=20, t=40, b=20)
+                    margin=dict(l=20, r=20, t=40, b=20),
+                    title_font_color='white'
                 )
                 st.plotly_chart(fig_portfolio, use_container_width=True)
             else:
@@ -414,7 +415,8 @@ if pm.portfolios:
                 showlegend=False,
                 margin=dict(l=20, r=20, t=40, b=20),
                 xaxis_title="Stock Symbol",
-                yaxis_title="Value ($)"
+                yaxis_title="Value ($)",
+                title_font_color='white'
             )
             st.plotly_chart(fig_holdings, use_container_width=True)
         
@@ -438,7 +440,8 @@ if pm.portfolios:
                 plot_bgcolor='rgba(0,0,0,0)',
                 font_color='white',
                 showlegend=False,
-                margin=dict(l=20, r=20, t=40, b=20)
+                margin=dict(l=20, r=20, t=40, b=20),
+                title_font_color='white'
             )
             st.plotly_chart(fig_positions, use_container_width=True)
         
@@ -451,21 +454,24 @@ if pm.portfolios:
                 fill_value=0
             )
             
-            if not portfolio_stock_matrix.empty:
-                fig_heatmap = px.imshow(
-                    portfolio_stock_matrix.values,
-                    labels=dict(x="Stock Symbol", y="Portfolio", color="Value"),
-                    x=portfolio_stock_matrix.columns,
-                    y=portfolio_stock_matrix.index,
-                    title="Portfolio-Stock Value Heatmap",
-                    color_continuous_scale='viridis'
-                )
-                fig_heatmap.update_layout(
-                    paper_bgcolor='rgba(0,0,0,0)',
-                    font_color='white',
-                    margin=dict(l=20, r=20, t=40, b=20)
-                )
-                st.plotly_chart(fig_heatmap, use_container_width=True)
+            if not portfolio_stock_matrix.empty and portfolio_stock_matrix.shape[0] > 0 and portfolio_stock_matrix.shape[1] > 0:
+                try:
+                    fig_heatmap = px.imshow(
+                        portfolio_stock_matrix.values,
+                        labels=dict(x="Stock Symbol", y="Portfolio", color="Value"),
+                        x=portfolio_stock_matrix.columns,
+                        y=portfolio_stock_matrix.index,
+                        title="Portfolio-Stock Value Heatmap",
+                        color_continuous_scale='viridis'
+                    )
+                    fig_heatmap.update_layout(
+                        paper_bgcolor='rgba(0,0,0,0)',
+                        font_color='white',
+                        margin=dict(l=20, r=20, t=40, b=20)
+                    )
+                    st.plotly_chart(fig_heatmap, use_container_width=True)
+                except Exception as e:
+                    st.info("Heatmap visualization temporarily unavailable")
             else:
                 st.info("Add more stocks to see heatmap visualization")
         
