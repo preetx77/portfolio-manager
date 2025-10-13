@@ -16,75 +16,211 @@ st.set_page_config(
     page_title="Portfolio Tracker - Home",
     page_icon="🏠",
     layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# ---------- Custom CSS (Futuristic/Glassmorphism) ----------
+# ---------- Enhanced Custom CSS ----------
 st.markdown(
     """
     <style>
-    /* Background gradient */
+    /* Background gradient with animated particles effect */
     .stApp {
-        background: radial-gradient(1200px 600px at 0% 0%, rgba(0, 255, 204, 0.06), transparent),
-                    radial-gradient(1200px 600px at 100% 0%, rgba(0, 127, 255, 0.06), transparent),
-                    linear-gradient(135deg, #0f172a 0%, #111827 100%);
+        background: radial-gradient(1200px 600px at 0% 0%, rgba(0, 255, 204, 0.08), transparent),
+                    radial-gradient(1200px 600px at 100% 0%, rgba(0, 127, 255, 0.08), transparent),
+                    radial-gradient(800px 400px at 50% 50%, rgba(167, 139, 250, 0.05), transparent),
+                    linear-gradient(135deg, #0a0e1a 0%, #0f172a 50%, #111827 100%);
         color: #e5e7eb;
     }
 
-    /* Glass cards */
+    /* Enhanced Glass cards with glow effect */
     .glass {
-        background: rgba(17, 25, 40, 0.55);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
-        backdrop-filter: blur(12px);
-        border-radius: 16px;
-        padding: 18px 20px;
+        background: rgba(17, 25, 40, 0.65);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(16px);
+        border-radius: 20px;
+        padding: 24px 28px;
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
-
-    .title {
-        font-weight: 700;
-        letter-spacing: 0.1rem;
-        background: -webkit-linear-gradient(45deg, #22d3ee, #a78bfa, #60a5fa);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-    }
-
-    .subtle { color: #94a3b8; }
-    .metric-card { 
-        text-align:center; 
-        padding: 15px; 
-        border-radius: 12px; 
-        border: 1px solid rgba(255,255,255,0.08);
-        transition: all 0.3s ease;
-        cursor: pointer;
-    }
-    .metric-card:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+    
+    .glass:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 16px 48px rgba(34, 211, 238, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.15);
         border: 1px solid rgba(34, 211, 238, 0.3);
     }
+
+    /* Gradient text */
+    .title {
+        font-weight: 800;
+        letter-spacing: 0.05rem;
+        background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 50%, #60a5fa 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+    
+    .hero-title {
+        font-weight: 900;
+        letter-spacing: -0.02rem;
+        background: linear-gradient(135deg, #22d3ee 0%, #a78bfa 40%, #60a5fa 70%, #34d399 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        animation: gradient-shift 8s ease infinite;
+        background-size: 200% 200%;
+    }
+    
+    @keyframes gradient-shift {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    /* Enhanced metric cards */
+    .metric-card { 
+        text-align: center; 
+        padding: 24px 20px; 
+        border-radius: 16px; 
+        border: 1px solid rgba(255,255,255,0.1);
+        background: linear-gradient(135deg, rgba(17, 25, 40, 0.9), rgba(17, 25, 40, 0.6));
+        transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .metric-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+        transition: left 0.5s;
+    }
+    
+    .metric-card:hover::before {
+        left: 100%;
+    }
+    
+    .metric-card:hover {
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 20px 60px rgba(34, 211, 238, 0.25);
+        border: 1px solid rgba(34, 211, 238, 0.5);
+    }
+    
+    /* Feature cards with enhanced hover */
+    .feature-card {
+        background: linear-gradient(135deg, rgba(17, 25, 40, 0.85), rgba(17, 25, 40, 0.5));
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        border-radius: 20px;
+        padding: 32px 24px;
+        text-align: center;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        cursor: pointer;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .feature-card::after {
+        content: '';
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        width: 0;
+        height: 0;
+        border-radius: 50%;
+        background: rgba(34, 211, 238, 0.1);
+        transform: translate(-50%, -50%);
+        transition: width 0.6s, height 0.6s;
+    }
+    
+    .feature-card:hover::after {
+        width: 300px;
+        height: 300px;
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-12px) scale(1.05);
+        box-shadow: 0 24px 72px rgba(34, 211, 238, 0.3);
+        border: 1px solid rgba(34, 211, 238, 0.6);
+    }
+
+    /* Color utilities */
+    .subtle { color: #94a3b8; }
     .success { color: #34d399; }
     .warn { color: #fbbf24; }
     .err { color: #f87171; }
+    .cyan { color: #22d3ee; }
+    .purple { color: #a78bfa; }
+    .blue { color: #60a5fa; }
+    
+    /* Pulse animation */
     .pulse {
-        animation: pulse 2s infinite;
+        animation: pulse 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
+    
     @keyframes pulse {
-        0% { opacity: 1; }
-        50% { opacity: 0.7; }
-        100% { opacity: 1; }
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.6; }
     }
+    
+    /* Float animation */
+    .float {
+        animation: float 6s ease-in-out infinite;
+    }
+    
+    @keyframes float {
+        0%, 100% { transform: translateY(0px); }
+        50% { transform: translateY(-20px); }
+    }
+    
+    /* Glow effect */
+    .glow {
+        box-shadow: 0 0 20px rgba(34, 211, 238, 0.3),
+                    0 0 40px rgba(34, 211, 238, 0.2),
+                    0 0 60px rgba(34, 211, 238, 0.1);
+    }
+    
+    /* Advanced card */
     .advanced-card {
-        background: linear-gradient(135deg, rgba(17, 25, 40, 0.8), rgba(17, 25, 40, 0.4));
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-        backdrop-filter: blur(16px);
-        border-radius: 20px;
-        padding: 25px;
+        background: linear-gradient(135deg, rgba(17, 25, 40, 0.9), rgba(17, 25, 40, 0.5));
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(20px);
+        border-radius: 24px;
+        padding: 32px;
+        transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    
+    .advanced-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 24px 72px rgba(34, 211, 238, 0.25);
+        border: 1px solid rgba(34, 211, 238, 0.3);
+    }
+    
+    /* Button enhancements */
+    .stButton > button {
+        border-radius: 12px;
+        font-weight: 600;
         transition: all 0.3s ease;
     }
-    .advanced-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 20px 60px rgba(34, 211, 238, 0.2);
+    
+    .stButton > button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 24px rgba(34, 211, 238, 0.3);
+    }
+    
+    /* Badge styles */
+    .badge {
+        display: inline-block;
+        padding: 6px 16px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        background: linear-gradient(135deg, rgba(34, 211, 238, 0.2), rgba(167, 139, 250, 0.2));
+        border: 1px solid rgba(34, 211, 238, 0.3);
     }
     </style>
     """,
@@ -104,22 +240,13 @@ if "pm" not in st.session_state:
 pm: PortfolioManager = st.session_state.pm
 reporter: ReportGenerator = st.session_state.reporter
 
-# ---------- Header ----------
-col1, col2 = st.columns([1, 3])
-with col1:
-    st.markdown("<h2 class='title'>🏠 Portfolio Tracker</h2>", unsafe_allow_html=True)
-with col2:
-    st.markdown(
-        "<div class='glass'><span class='subtle'>Advanced portfolio management platform</span></div>",
-        unsafe_allow_html=True,
-    )
-
-st.write("")
-
 # ---------- Global KPIs ----------
 total_portfolios = len(pm.portfolios)
 total_positions = sum(len(p.stocks) for p in pm.portfolios.values())
 total_value = sum(p.calculate_portfolio_value() for p in pm.portfolios.values())
+
+# Calculate portfolio growth (mock data for demo - can be replaced with real calculation)
+portfolio_growth = 12.5 if total_value > 0 else 0
 
 # ---------- Sidebar: Profile & Quick Actions ----------
 st.sidebar.header("👤 Profile")
@@ -204,125 +331,165 @@ with st.sidebar:
 
 # ---------- HOME PAGE CONTENT ----------
 
-# Hero Section
+# Page Header
 st.markdown("""
-<div class='glass' style='text-align: center; padding: 40px 20px; margin-bottom: 30px;'>
-    <h1 class='title' style='font-size: 3.5rem; margin-bottom: 20px;'>
-        🚀 Portfolio Tracker
-    </h1>
-    <p style='font-size: 1.3rem; color: #94a3b8; margin-bottom: 30px; line-height: 1.6;'>
-        Advanced portfolio management with real-time analytics, AI-powered insights, and futuristic design
-    </p>
-    <div style='display: flex; justify-content: center; gap: 20px; flex-wrap: wrap;'>
-        <div style='background: linear-gradient(45deg, #22d3ee, #a78bfa); padding: 2px; border-radius: 12px;'>
-            <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
-                ⚡ Real-time Data
-            </div>
-        </div>
-        <div style='background: linear-gradient(45deg, #a78bfa, #60a5fa); padding: 2px; border-radius: 12px;'>
-            <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
-                📊 Advanced Analytics
-            </div>
-        </div>
-        <div style='background: linear-gradient(45deg, #60a5fa, #34d399); padding: 2px; border-radius: 12px;'>
-            <div style='background: #111827; padding: 12px 24px; border-radius: 10px; color: white;'>
-                🎨 Futuristic UI
-            </div>
-        </div>
-    </div>
+<div style='text-align: center; margin-bottom: 20px;'>
+    <h1 class='title' style='font-size: 3rem; margin-bottom: 8px;'>🏠 Welcome Home</h1>
+    <p class='subtle' style='font-size: 1.1rem;'>Your investment command center</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Quick Stats Dashboard
+st.markdown("---")
+st.write("")
+
+# Enhanced Stats Dashboard with Animations
+st.markdown("""
+<div style='text-align: center; margin-bottom: 20px;'>
+    <h2 class='title' style='font-size: 2.2rem; margin-bottom: 10px;'>📊 Your Portfolio at a Glance</h2>
+    <p class='subtle' style='font-size: 1.1rem;'>Real-time overview of your investment performance</p>
+</div>
+""", unsafe_allow_html=True)
+
 col1, col2, col3, col4 = st.columns(4)
 
 with col1:
-    st.markdown("""
-    <div class='glass' style='text-align: center; padding: 25px;'>
-        <div style='font-size: 2.5rem; margin-bottom: 10px;'>💼</div>
-        <h3 style='color: #22d3ee; margin: 0;'>{}</h3>
-        <p style='color: #94a3b8; margin: 5px 0 0 0;'>Active Portfolios</p>
+    st.markdown(f"""
+    <div class='metric-card float'>
+        <div style='font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.5));'>💼</div>
+        <h2 style='color: #22d3ee; margin: 0; font-size: 2.8rem; font-weight: 800;'>{total_portfolios}</h2>
+        <p style='color: #94a3b8; margin: 8px 0 0 0; font-size: 1rem; font-weight: 600;'>Active Portfolios</p>
+        <div style='margin-top: 12px; padding: 6px 12px; background: rgba(34, 211, 238, 0.1); border-radius: 8px; display: inline-block;'>
+            <span style='color: #22d3ee; font-size: 0.85rem; font-weight: 600;'>📈 Managed</span>
+        </div>
     </div>
-    """.format(total_portfolios), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with col2:
-    st.markdown("""
-    <div class='glass' style='text-align: center; padding: 25px;'>
-        <div style='font-size: 2.5rem; margin-bottom: 10px;'>📈</div>
-        <h3 style='color: #a78bfa; margin: 0;'>{}</h3>
-        <p style='color: #94a3b8; margin: 5px 0 0 0;'>Total Positions</p>
+    st.markdown(f"""
+    <div class='metric-card float' style='animation-delay: 0.2s;'>
+        <div style='font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.5));'>📈</div>
+        <h2 style='color: #a78bfa; margin: 0; font-size: 2.8rem; font-weight: 800;'>{total_positions}</h2>
+        <p style='color: #94a3b8; margin: 8px 0 0 0; font-size: 1rem; font-weight: 600;'>Total Positions</p>
+        <div style='margin-top: 12px; padding: 6px 12px; background: rgba(167, 139, 250, 0.1); border-radius: 8px; display: inline-block;'>
+            <span style='color: #a78bfa; font-size: 0.85rem; font-weight: 600;'>🎯 Diversified</span>
+        </div>
     </div>
-    """.format(total_positions), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with col3:
-    st.markdown("""
-    <div class='glass' style='text-align: center; padding: 25px;'>
-        <div style='font-size: 2.5rem; margin-bottom: 10px;'>💰</div>
-        <h3 style='color: #34d399; margin: 0;'>${:,.0f}</h3>
-        <p style='color: #94a3b8; margin: 5px 0 0 0;'>Total Value</p>
+    st.markdown(f"""
+    <div class='metric-card float' style='animation-delay: 0.4s;'>
+        <div style='font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.5));'>💰</div>
+        <h2 style='color: #34d399; margin: 0; font-size: 2.8rem; font-weight: 800;'>${total_value:,.0f}</h2>
+        <p style='color: #94a3b8; margin: 8px 0 0 0; font-size: 1rem; font-weight: 600;'>Total Value</p>
+        <div style='margin-top: 12px; padding: 6px 12px; background: rgba(52, 211, 153, 0.1); border-radius: 8px; display: inline-block;'>
+            <span style='color: #34d399; font-size: 0.85rem; font-weight: 600;'>↗ +{portfolio_growth}%</span>
+        </div>
     </div>
-    """.format(total_value), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 with col4:
     active_user = st.session_state.get("username", "default")
-    st.markdown("""
-    <div class='glass' style='text-align: center; padding: 25px;'>
-        <div style='font-size: 2.5rem; margin-bottom: 10px;'>👤</div>
-        <h3 style='color: #60a5fa; margin: 0;'>{}</h3>
-        <p style='color: #94a3b8; margin: 5px 0 0 0;'>Active Profile</p>
+    st.markdown(f"""
+    <div class='metric-card float' style='animation-delay: 0.6s;'>
+        <div style='font-size: 3rem; margin-bottom: 12px; filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));'>👤</div>
+        <h2 style='color: #60a5fa; margin: 0; font-size: 2rem; font-weight: 800;'>{active_user.title()}</h2>
+        <p style='color: #94a3b8; margin: 8px 0 0 0; font-size: 1rem; font-weight: 600;'>Active Profile</p>
+        <div style='margin-top: 12px; padding: 6px 12px; background: rgba(96, 165, 250, 0.1); border-radius: 8px; display: inline-block;'>
+            <span style='color: #60a5fa; font-size: 0.85rem; font-weight: 600;'>✓ Verified</span>
+        </div>
     </div>
-    """.format(active_user.title()), unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 st.write("")
+st.write("")
 
-# Compact Features Overview
+# Enhanced Platform Features Section
 st.markdown("""
-<div class='glass' style='padding: 20px;'>
-    <h2 class='title' style='text-align: center; margin-bottom: 25px; font-size: 1.8rem;'>
-        🌟 Platform Features
-    </h2>
+<div style='text-align: center; margin: 50px 0 30px 0;'>
+    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🌟 Powerful Features</h2>
+    <p class='subtle' style='font-size: 1.15rem;'>Everything you need to manage your investments like a pro</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Compact Feature Cards
-feat_col1, feat_col2, feat_col3, feat_col4 = st.columns(4)
+# Enhanced Feature Cards Grid
+feat_col1, feat_col2 = st.columns(2)
 
 with feat_col1:
     st.markdown("""
-    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
-        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📊</div>
-        <h4 style='color: #22d3ee; margin: 0; font-size: 0.8rem;'>Portfolio Management</h4>
-        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Multi-portfolio tracking</p>
+    <div class='feature-card' style='text-align: left; margin-bottom: 20px;'>
+        <div style='display: flex; align-items: center; margin-bottom: 16px;'>
+            <div style='font-size: 3rem; margin-right: 20px; filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.5));'>📊</div>
+            <div>
+                <h3 style='color: #22d3ee; margin: 0; font-size: 1.5rem; font-weight: 700;'>Portfolio Management</h3>
+                <p style='color: #94a3b8; margin: 4px 0 0 0; font-size: 0.95rem;'>Multi-portfolio tracking & organization</p>
+            </div>
+        </div>
+        <ul style='color: #94a3b8; margin: 0; padding-left: 20px; line-height: 1.8;'>
+            <li>Create unlimited portfolios</li>
+            <li>Track multiple asset classes</li>
+            <li>Real-time portfolio valuation</li>
+            <li>Performance analytics</li>
+        </ul>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    st.markdown("""
+    <div class='feature-card' style='text-align: left; margin-bottom: 20px;'>
+        <div style='display: flex; align-items: center; margin-bottom: 16px;'>
+            <div style='font-size: 3rem; margin-right: 20px; filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.5));'>📈</div>
+            <div>
+                <h3 style='color: #a78bfa; margin: 0; font-size: 1.5rem; font-weight: 700;'>Live Market Data</h3>
+                <p style='color: #94a3b8; margin: 4px 0 0 0; font-size: 0.95rem;'>Real-time market information</p>
+            </div>
+        </div>
+        <ul style='color: #94a3b8; margin: 0; padding-left: 20px; line-height: 1.8;'>
+            <li>Live stock prices & indices</li>
+            <li>Interactive price charts</li>
+            <li>Historical data analysis</li>
+            <li>Market trends & indicators</li>
+        </ul>
     </div>
     """, unsafe_allow_html=True)
 
 with feat_col2:
     st.markdown("""
-    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
-        <div style='font-size: 1.5rem; margin-bottom: 5px;'>💹</div>
-        <h4 style='color: #34d399; margin: 0; font-size: 0.8rem;'>Trading Platform</h4>
-        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Buy/sell execution</p>
+    <div class='feature-card' style='text-align: left; margin-bottom: 20px;'>
+        <div style='display: flex; align-items: center; margin-bottom: 16px;'>
+            <div style='font-size: 3rem; margin-right: 20px; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.5));'>💹</div>
+            <div>
+                <h3 style='color: #34d399; margin: 0; font-size: 1.5rem; font-weight: 700;'>Trading Platform</h3>
+                <p style='color: #94a3b8; margin: 4px 0 0 0; font-size: 0.95rem;'>Execute trades seamlessly</p>
+            </div>
+        </div>
+        <ul style='color: #94a3b8; margin: 0; padding-left: 20px; line-height: 1.8;'>
+            <li>Buy & sell stocks instantly</li>
+            <li>Transaction history tracking</li>
+            <li>Portfolio rebalancing tools</li>
+            <li>Order execution analytics</li>
+        </ul>
     </div>
     """, unsafe_allow_html=True)
-
-with feat_col3:
+    
     st.markdown("""
-    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
-        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📈</div>
-        <h4 style='color: #a78bfa; margin: 0; font-size: 0.8rem;'>Live Market Data</h4>
-        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>Real-time charts</p>
+    <div class='feature-card' style='text-align: left; margin-bottom: 20px;'>
+        <div style='display: flex; align-items: center; margin-bottom: 16px;'>
+            <div style='font-size: 3rem; margin-right: 20px; filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));'>📄</div>
+            <div>
+                <h3 style='color: #60a5fa; margin: 0; font-size: 1.5rem; font-weight: 700;'>Smart Reports</h3>
+                <p style='color: #94a3b8; margin: 4px 0 0 0; font-size: 0.95rem;'>AI-powered insights & analysis</p>
+            </div>
+        </div>
+        <ul style='color: #94a3b8; margin: 0; padding-left: 20px; line-height: 1.8;'>
+            <li>Comprehensive portfolio reports</li>
+            <li>Performance metrics & KPIs</li>
+            <li>Risk analysis & recommendations</li>
+            <li>Export & share capabilities</li>
+        </ul>
     </div>
     """, unsafe_allow_html=True)
 
-with feat_col4:
-    st.markdown("""
-    <div class='glass' style='padding: 10px; text-align: center; height: 90px;'>
-        <div style='font-size: 1.5rem; margin-bottom: 5px;'>📄</div>
-        <h4 style='color: #60a5fa; margin: 0; font-size: 0.8rem;'>Smart Reports</h4>
-        <p style='color: #94a3b8; margin: 3px 0 0 0; font-size: 0.65rem;'>AI-powered insights</p>
-    </div>
-    """, unsafe_allow_html=True)
-
+st.write("")
 st.write("")
 
 # Portfolio Distribution Charts Section
@@ -507,32 +674,61 @@ else:
 
 st.write("")
 
-# Quick Actions
+# Enhanced Quick Actions Section
 st.markdown("""
-<div class='glass' style='padding: 30px; text-align: center;'>
-    <h3 class='title' style='margin-bottom: 30px; font-size: 1.8rem;'>🚀 Quick Actions</h3>
+<div style='text-align: center; margin: 50px 0 30px 0;'>
+    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🚀 Quick Actions</h2>
+    <p class='subtle' style='font-size: 1.15rem;'>Jump right into managing your investments</p>
 </div>
 """, unsafe_allow_html=True)
 
 action_col1, action_col2, action_col3, action_col4 = st.columns(4)
 
 with action_col1:
-    if st.button("📊 View Portfolios", use_container_width=True, key="home_portfolios"):
+    st.markdown("""
+    <div class='feature-card' style='padding: 24px 20px; min-height: 180px;'>
+        <div style='font-size: 3.5rem; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.5));'>📊</div>
+        <h4 style='color: #22d3ee; margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 700;'>View Portfolios</h4>
+        <p style='color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;'>Manage your investments</p>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Go to Portfolios →", use_container_width=True, key="home_portfolios"):
         st.switch_page("pages/1_📊_Portfolios.py")
 
 with action_col2:
-    if st.button("💹 Start Trading", use_container_width=True, key="home_trade"):
+    st.markdown("""
+    <div class='feature-card' style='padding: 24px 20px; min-height: 180px;'>
+        <div style='font-size: 3.5rem; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(52, 211, 153, 0.5));'>💹</div>
+        <h4 style='color: #34d399; margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 700;'>Start Trading</h4>
+        <p style='color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;'>Buy & sell stocks</p>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Go to Trading →", use_container_width=True, key="home_trade"):
         st.switch_page("pages/2_💹_Trading.py")
 
 with action_col3:
-    if st.button("📈 Live Market", use_container_width=True, key="home_market"):
+    st.markdown("""
+    <div class='feature-card' style='padding: 24px 20px; min-height: 180px;'>
+        <div style='font-size: 3.5rem; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(167, 139, 250, 0.5));'>📈</div>
+        <h4 style='color: #a78bfa; margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 700;'>Live Market</h4>
+        <p style='color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;'>Real-time data & charts</p>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Go to Market →", use_container_width=True, key="home_market"):
         st.switch_page("pages/3_📈_Live_Market.py")
 
 with action_col4:
-    if st.button("📄 Generate Report", use_container_width=True, key="home_report"):
+    st.markdown("""
+    <div class='feature-card' style='padding: 24px 20px; min-height: 180px;'>
+        <div style='font-size: 3.5rem; margin-bottom: 16px; filter: drop-shadow(0 0 10px rgba(96, 165, 250, 0.5));'>📄</div>
+        <h4 style='color: #60a5fa; margin: 0 0 8px 0; font-size: 1.2rem; font-weight: 700;'>Generate Report</h4>
+        <p style='color: #94a3b8; font-size: 0.9rem; margin-bottom: 16px;'>AI-powered insights</p>
+    </div>
+    """, unsafe_allow_html=True)
+    if st.button("Go to Reports →", use_container_width=True, key="home_report"):
         st.switch_page("pages/4_📄_Reports.py")
 
-# Technology Stack
+st.write("")
 st.write("")
 # Advanced Market Overview
 st.markdown("""
@@ -683,17 +879,19 @@ with analytics_col3:
 
 st.write("")
 
-# Technology Stack
+# Compact Footer
+st.write("")
+st.write("")
 st.markdown("""
-<div class='glass' style='padding: 25px; text-align: center;'>
-    <h4 style='color: #94a3b8; margin-bottom: 20px;'>Powered by Advanced Technology</h4>
-    <div style='display: flex; justify-content: center; gap: 30px; flex-wrap: wrap;'>
-        <span style='color: #22d3ee;'>🐍 Python</span>
-        <span style='color: #a78bfa;'>📊 Streamlit</span>
-        <span style='color: #34d399;'>📈 Plotly</span>
-        <span style='color: #60a5fa;'>💾 SQLite</span>
-        <span style='color: #f59e0b;'>📡 yfinance</span>
-        <span style='color: #ec4899;'>🤖 AI Analytics</span>
+<div class='glass' style='text-align: center; padding: 30px 20px; margin-top: 60px;'>
+    <p style='color: #94a3b8; font-size: 1rem; margin-bottom: 16px;'>
+        <span style='font-weight: 600; color: #22d3ee;'>Powered by:</span> 
+        🐍 Python • 📊 Streamlit • 📈 Plotly • 💾 SQLite • 📡 yfinance • 🤖 AI Analytics
+    </p>
+    <div style='border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 16px; margin-top: 16px;'>
+        <p style='color: #94a3b8; font-size: 0.9rem; margin: 0;'>
+            © 2025 Portfolio Tracker | Built with ❤️ for investors
+        </p>
     </div>
 </div>
 """, unsafe_allow_html=True)
