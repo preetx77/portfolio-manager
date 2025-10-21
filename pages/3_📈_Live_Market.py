@@ -83,206 +83,238 @@ with colB:
 with colC:
     go_btn = st.button("📊 Load Market Data", type="primary")
 
+# Initialize latest_prices outside the try block
+latest_prices = {}
+
+# Validate period/interval combination
+def validate_period_interval(period, interval):
+    """Validate if period/interval combination is supported by yfinance"""
+    period_days = {
+        "1d": 1, "5d": 5, "1mo": 30, "3mo": 90,
+        "6mo": 180, "1y": 365
+    }
+
+    interval_limits = {
+        "1m": 7,    # 1m max 7 days
+        "5m": 60,   # 5m max 60 days
+        "15m": 60,  # 15m max 60 days
+        "30m": 60,  # 30m max 60 days
+        "1h": 730,  # 1h max 2 years
+        "1d": 9999  # 1d no limit
+    }
+
+    selected_days = period_days.get(period, 0)
+    max_days = interval_limits.get(interval, 0)
+
+    if selected_days > max_days:
+        return False, f"Interval '{interval}' only supports up to {max_days} days. Selected period '{period}' is {selected_days} days."
+    return True, ""
+
 if go_btn and sym_input.strip():
-    try:
-        with st.spinner("Fetching market data..."):
-            tickers = [s.strip().upper() for s in sym_input.split(",") if s.strip()]
-            
-            # Enhanced error handling and data fetching
-            if len(tickers) == 1:
-                data = yf.download(tickers[0], period=period, interval=interval, auto_adjust=True, progress=False)
-                if not data.empty:
-                    data = {tickers[0]: data}
-            else:
-                data = yf.download(tickers, period=period, interval=interval, group_by='ticker', auto_adjust=True, threads=True, progress=False)
+    is_valid, error_msg = validate_period_interval(period, interval)
+    if not is_valid:
+        st.error(f"Invalid period/interval combination: {error_msg}")
+        st.info("💡 **Tip:** Choose a shorter period or longer interval for better compatibility.")
+    else:
+        try:
+            with st.spinner("Fetching market data..."):
+                tickers = [s.strip().upper() for s in sym_input.split(",") if s.strip()]
 
-            # Enhanced data processing
-            plot_rows = []
-            latest_prices = {}
-            
-            for t in tickers:
-                try:
-                    if len(tickers) == 1:
-                        df = data.get(t, data) if isinstance(data, dict) else data
-                    else:
-                        df = data[t] if t in data.columns.get_level_values(0) else None
-                    
-                    if df is None or df.empty:
-                        st.warning(f"No data available for {t}")
-                        continue
-                        
-                    df = df.dropna()
-                    if df.empty:
-                        st.warning(f"No valid data for {t} after cleaning")
-                        continue
-                        
-                    # Get the close price column
-                    if 'Close' in df.columns:
-                        close_col = df['Close']
-                    elif len(df.columns) > 0:
-                        close_col = df.iloc[:, -1]  # Use last column if Close not found
-                    else:
-                        continue
-                        
-                    latest_prices[t] = float(close_col.iloc[-1])
-                    
-                    for ts, price in close_col.items():
-                        plot_rows.append({
-                            "Datetime": ts, 
-                            "Symbol": t, 
-                            "Close": float(price)
-                        })
-                except Exception as e:
-                    st.error(f"Error processing {t}: {str(e)}")
-                    continue
+                # Enhanced error handling and data fetching
+                if len(tickers) == 1:
+                    data = yf.download(tickers[0], period=period, interval=interval, auto_adjust=True, progress=False)
+                    if not data.empty:
+                        data = {tickers[0]: data}
+                else:
+                    data = yf.download(tickers, period=period, interval=interval, group_by='ticker', auto_adjust=True, threads=True, progress=False)
 
-            if not plot_rows:
-                st.info("No price data returned for the given inputs.")
-            else:
-                pdf = pd.DataFrame(plot_rows)
-                
-                # Market Statistics
-                st.markdown("### 📈 Market Overview")
-                market_cols = st.columns(len(tickers))
-                
-                for i, ticker in enumerate(tickers):
-                    if ticker in latest_prices:
-                        ticker_data = pdf[pdf['Symbol'] == ticker]['Close']
-                        if not ticker_data.empty:
-                            current_price = latest_prices[ticker]
-                            start_price = ticker_data.iloc[0]
-                            change = current_price - start_price
-                            change_pct = (change / start_price * 100) if start_price != 0 else 0
-                            
-                            with market_cols[i]:
-                                delta_color = "normal" if change >= 0 else "inverse"
-                                st.metric(
-                                    label=ticker,
-                                    value=f"${current_price:,.2f}",
-                                    delta=f"{change_pct:+.2f}%",
-                                    delta_color=delta_color
-                                )
-                
-                # TradingView-style line chart
-                fig = go.Figure()
-                
-                # TradingView color scheme for different symbols
-                tv_colors = ['#2962ff', '#ff6d00', '#00c853', '#e91e63', '#9c27b0', '#ff9800', '#795548']
-                
-                for i, ticker in enumerate(tickers):
-                    ticker_data = pdf[pdf['Symbol'] == ticker]
-                    if not ticker_data.empty:
-                        fig.add_trace(go.Scatter(
-                            x=ticker_data['Datetime'],
-                            y=ticker_data['Close'],
-                            mode='lines',
-                            name=ticker,
-                            line=dict(
-                                color=tv_colors[i % len(tv_colors)],
-                                width=2
-                            ),
-                            hovertemplate=f'<b>{ticker}</b><br>Price: $%{{y:,.2f}}<br>%{{x}}<extra></extra>'
-                        ))
-                
-                # TradingView styling
-                fig.update_layout(
-                    title=dict(
-                        text="Market Prices - TradingView Style",
-                        font=dict(size=16, color="#d1d5db", family="Arial"),
-                        x=0.02,
-                        y=0.95
-                    ),
-                    margin=dict(l=60, r=20, t=60, b=40),
-                    paper_bgcolor="#1a1a1a",
-                    plot_bgcolor="#1a1a1a",
-                    font=dict(color="#d1d5db", size=11, family="Arial"),
-                    legend=dict(
-                        orientation="h",
-                        yanchor="bottom",
-                        y=1.02,
-                        xanchor="left",
-                        x=0,
-                        bgcolor="rgba(26, 26, 26, 0.8)",
-                        bordercolor="#2a2a2a",
-                        borderwidth=1
-                    ),
-                    hovermode='x unified'
-                )
-                
-                fig.update_xaxes(
-                    showgrid=True,
-                    gridcolor="#2a2a2a",
-                    gridwidth=1,
-                    tickfont=dict(color="#9ca3af", size=10),
-                    title=dict(text="Time", font=dict(color="#9ca3af", size=11))
-                )
-                
-                fig.update_yaxes(
-                    showgrid=True,
-                    gridcolor="#2a2a2a",
-                    gridwidth=1,
-                    tickfont=dict(color="#9ca3af", size=10),
-                    tickformat="$,.2f",
-                    title=dict(text="Price ($)", font=dict(color="#9ca3af", size=11))
-                )
-                
-                st.plotly_chart(fig, use_container_width=True)
+                # Enhanced data processing
+                plot_rows = []
+                latest_prices = {}
 
-                # Market Summary Table
-                st.markdown("### 📊 Market Summary")
-                summary_data = []
-                for ticker in tickers:
-                    if ticker in latest_prices:
-                        ticker_data = pdf[pdf['Symbol'] == ticker]['Close']
-                        if not ticker_data.empty:
-                            current_price = latest_prices[ticker]
-                            start_price = ticker_data.iloc[0]
-                            high_price = ticker_data.max()
-                            low_price = ticker_data.min()
-                            change = current_price - start_price
-                            change_pct = (change / start_price * 100) if start_price != 0 else 0
-                            
-                            summary_data.append({
-                                "Symbol": ticker,
-                                "Current": f"${current_price:,.2f}",
-                                "Change": f"${change:+,.2f}",
-                                "Change %": f"{change_pct:+.2f}%",
-                                "High": f"${high_price:,.2f}",
-                                "Low": f"${low_price:,.2f}",
-                                "Volume": "N/A"
+                for t in tickers:
+                    try:
+                        if len(tickers) == 1:
+                            df = data.get(t, data) if isinstance(data, dict) else data
+                        else:
+                            df = data[t] if t in data.columns.get_level_values(0) else None
+
+                        if df is None or df.empty:
+                            st.warning(f"No data available for {t}")
+                            continue
+
+                        df = df.dropna()
+                        if df.empty:
+                            st.warning(f"No valid data for {t} after cleaning")
+                            continue
+
+                        # Get the close price column
+                        if 'Close' in df.columns:
+                            close_col = df['Close']
+                        elif len(df.columns) > 0:
+                            close_col = df.iloc[:, -1]  # Use last column if Close not found
+                        else:
+                            continue
+
+                        latest_prices[t] = float(close_col.iloc[-1])
+
+                        for ts, price in close_col.items():
+                            plot_rows.append({
+                                "Datetime": ts,
+                                "Symbol": t,
+                                "Close": float(price)
                             })
-                
-                if summary_data:
-                    st.dataframe(summary_data, use_container_width=True, hide_index=True)
+                    except Exception as e:
+                        st.error(f"Error processing {t}: {str(e)}")
+                        continue
 
-        st.markdown("</div>", unsafe_allow_html=True)
+                if not plot_rows:
+                    st.info("No price data returned for the given inputs.")
+                else:
+                    pdf = pd.DataFrame(plot_rows)
 
-    except Exception as e:
-        st.error(f"Failed to load market data: {str(e)}")
-        st.info("💡 **Troubleshooting Tips:**")
-        st.markdown("""
-        - Check your internet connection
-        - Verify stock symbols are correct (e.g., AAPL, MSFT, GOOGL)
-        - Try with fewer symbols or different time periods
-        - Some symbols may not have data for the selected interval
-        """)
-        
-        # Show sample data as fallback
-        st.markdown("### 📊 Sample Market Data")
-        sample_data = {
-            'Symbol': ['AAPL', 'MSFT', 'GOOGL', 'TSLA'],
-            'Price': [150.25, 280.50, 2650.75, 850.30],
-            'Change': ['+2.5%', '-1.2%', '+0.8%', '+3.1%'],
-            'Volume': ['45.2M', '28.7M', '1.2M', '22.8M']
-        }
-        st.dataframe(sample_data, use_container_width=True)
+                    # Market Statistics
+                    st.markdown("### 📈 Market Overview")
+                    market_cols = st.columns(len(tickers))
 
-# Quick Trade Panel
-if 'latest_prices' in locals() and latest_prices and pm.portfolios:
+                    for i, ticker in enumerate(tickers):
+                        if ticker in latest_prices:
+                            ticker_data = pdf[pdf['Symbol'] == ticker]['Close']
+                            if not ticker_data.empty:
+                                current_price = latest_prices[ticker]
+                                start_price = ticker_data.iloc[0]
+                                change = current_price - start_price
+                                change_pct = (change / start_price * 100) if start_price != 0 else 0
+
+                                with market_cols[i]:
+                                    delta_color = "normal" if change >= 0 else "inverse"
+                                    st.metric(
+                                        label=ticker,
+                                        value=f"${current_price:,.2f}",
+                                        delta=f"{change_pct:+.2f}%",
+                                        delta_color=delta_color
+                                    )
+
+                    # TradingView-style line chart
+                    fig = go.Figure()
+
+                    # TradingView color scheme for different symbols
+                    tv_colors = ['#2962ff', '#ff6d00', '#00c853', '#e91e63', '#9c27b0', '#ff9800', '#795548']
+
+                    for i, ticker in enumerate(tickers):
+                        ticker_data = pdf[pdf['Symbol'] == ticker]
+                        if not ticker_data.empty:
+                            fig.add_trace(go.Scatter(
+                                x=ticker_data['Datetime'],
+                                y=ticker_data['Close'],
+                                mode='lines',
+                                name=ticker,
+                                line=dict(
+                                    color=tv_colors[i % len(tv_colors)],
+                                    width=2
+                                ),
+                                hovertemplate=f'<b>{ticker}</b><br>Price: $%{{y:,.2f}}<br>%{{x}}<extra></extra>'
+                            ))
+
+                    # TradingView styling
+                    fig.update_layout(
+                        title=dict(
+                            text="Market Prices - TradingView Style",
+                            font=dict(size=16, color="#d1d5db", family="Arial"),
+                            x=0.02,
+                            y=0.95
+                        ),
+                        margin=dict(l=60, r=20, t=60, b=40),
+                        paper_bgcolor="#1a1a1a",
+                        plot_bgcolor="#1a1a1a",
+                        font=dict(color="#d1d5db", size=11, family="Arial"),
+                        legend=dict(
+                            orientation="h",
+                            yanchor="bottom",
+                            y=1.02,
+                            xanchor="left",
+                            x=0,
+                            bgcolor="rgba(26, 26, 26, 0.8)",
+                            bordercolor="#2a2a2a",
+                            borderwidth=1
+                        ),
+                        hovermode='x unified'
+                    )
+
+                    fig.update_xaxes(
+                        showgrid=True,
+                        gridcolor="#2a2a2a",
+                        gridwidth=1,
+                        tickfont=dict(color="#9ca3af", size=10),
+                        title=dict(text="Time", font=dict(color="#9ca3af", size=11))
+                    )
+
+                    fig.update_yaxes(
+                        showgrid=True,
+                        gridcolor="#2a2a2a",
+                        gridwidth=1,
+                        tickfont=dict(color="#9ca3af", size=10),
+                        tickformat="$,.2f",
+                        title=dict(text="Price ($)", font=dict(color="#9ca3af", size=11))
+                    )
+
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # Market Summary Table
+                    st.markdown("### 📊 Market Summary")
+                    summary_data = []
+                    for ticker in tickers:
+                        if ticker in latest_prices:
+                            ticker_data = pdf[pdf['Symbol'] == ticker]['Close']
+                            if not ticker_data.empty:
+                                current_price = latest_prices[ticker]
+                                start_price = ticker_data.iloc[0]
+                                high_price = ticker_data.max()
+                                low_price = ticker_data.min()
+                                change = current_price - start_price
+                                change_pct = (change / start_price * 100) if start_price != 0 else 0
+
+                                summary_data.append({
+                                    "Symbol": ticker,
+                                    "Current": f"${current_price:,.2f}",
+                                    "Change": f"${change:+,.2f}",
+                                    "Change %": f"{change_pct:+.2f}%",
+                                    "High": f"${high_price:,.2f}",
+                                    "Low": f"${low_price:,.2f}",
+                                    "Volume": "N/A"
+                                })
+
+                    if summary_data:
+                        st.dataframe(summary_data, use_container_width=True, hide_index=True)
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        except Exception as e:
+            st.error(f"Failed to load market data: {str(e)}")
+            st.info("💡 **Troubleshooting Tips:**")
+            st.markdown("""
+            - Check your internet connection
+            - Verify stock symbols are correct (e.g., AAPL, MSFT, GOOGL)
+            - Try with fewer symbols or different time periods
+            - Some symbols may not have data for the selected interval
+            """)
+
+            # Show sample data as fallback
+            st.markdown("### 📊 Sample Market Data")
+            sample_data = {
+                'Symbol': ['AAPL', 'MSFT', 'GOOGL', 'TSLA'],
+                'Price': [150.25, 280.50, 2650.75, 850.30],
+                'Change': ['+2.5%', '-1.2%', '+0.8%', '+3.1%'],
+                'Volume': ['45.2M', '28.7M', '1.2M', '22.8M']
+            }
+            st.dataframe(sample_data, use_container_width=True)
+
+# Quick Trade Panel - Fix the variable scope issue
+if latest_prices and pm.portfolios:
     st.write("")
     st.markdown("<div class='glass'>", unsafe_allow_html=True)
     st.markdown("### ⚡ Quick Trade at Market Price")
-    
+
     tcol1, tcol2, tcol3, tcol4, tcol5 = st.columns([1,1,1,1,2])
     with tcol1:
         q_port = st.selectbox("Portfolio", options=list(pm.portfolios.keys()), key="live_port")
@@ -314,8 +346,8 @@ if 'latest_prices' in locals() and latest_prices and pm.portfolios:
                 st.rerun()
             except Exception as e:
                 st.error(f"❌ Error: {str(e)}")
-            
-            st.markdown("</div>", unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
 
 # Market News Section (Placeholder)
 st.write("")
