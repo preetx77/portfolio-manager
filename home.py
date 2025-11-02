@@ -331,24 +331,113 @@ with st.sidebar:
 
 # ---------- HOME PAGE CONTENT ----------
 
-# Page Header
+# Hero Section with Clear Value Proposition
 st.markdown("""
-<div style='text-align: center; margin-bottom: 20px;'>
-    <h1 class='title' style='font-size: 3rem; margin-bottom: 8px;'>🏠 Welcome Home</h1>
-    <p class='subtle' style='font-size: 1.1rem;'>Your investment command center</p>
+<div style='text-align: center; padding: 40px 20px 60px 20px;'>
+    <div style='font-size: 4rem; margin-bottom: 20px;'>💼</div>
+    <h1 class='hero-title' style='font-size: 3.5rem; margin-bottom: 16px; line-height: 1.2;'>
+        Welcome to Your Portfolio Hub
+    </h1>
+    <p class='subtle' style='font-size: 1.3rem; max-width: 700px; margin: 0 auto 24px auto; line-height: 1.6;'>
+        Track, analyze, and grow your investments with powerful tools and real-time insights
+    </p>
+    <div style='display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; margin-top: 30px;'>
+        <span class='badge'>📊 Multi-Portfolio</span>
+        <span class='badge'>📈 Real-Time Data</span>
+        <span class='badge'>🤖 AI Insights</span>
+        <span class='badge'>📱 Easy to Use</span>
+    </div>
 </div>
 """, unsafe_allow_html=True)
 
-st.markdown("---")
-st.write("")
+# Check if user has portfolios - show different content based on status
+has_portfolios = len(pm.portfolios) > 0
+has_stocks = total_positions > 0
 
-# Enhanced Stats Dashboard with Animations
-st.markdown("""
-<div style='text-align: center; margin-bottom: 20px;'>
-    <h2 class='title' style='font-size: 2.2rem; margin-bottom: 10px;'>📊 Your Portfolio at a Glance</h2>
-    <p class='subtle' style='font-size: 1.1rem;'>Real-time overview of your investment performance</p>
-</div>
-""", unsafe_allow_html=True)
+if not has_portfolios:
+    # Getting Started Guide for New Users
+    st.markdown("""
+    <div class='advanced-card' style='text-align: center; padding: 50px 30px; margin: 40px 0;'>
+        <div style='font-size: 4rem; margin-bottom: 20px;'>🚀</div>
+        <h2 class='title' style='font-size: 2.5rem; margin-bottom: 16px;'>Let's Get Started!</h2>
+        <p class='subtle' style='font-size: 1.2rem; margin-bottom: 30px; max-width: 600px; margin-left: auto; margin-right: auto;'>
+            You're just 3 simple steps away from tracking your investments like a pro
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Step-by-step guide
+    step_col1, step_col2, step_col3 = st.columns(3)
+    
+    with step_col1:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center; padding: 40px 24px;'>
+            <div style='font-size: 4rem; margin-bottom: 20px;'>1️⃣</div>
+            <h3 style='color: #22d3ee; margin-bottom: 12px; font-size: 1.4rem;'>Create Portfolio</h3>
+            <p style='color: #94a3b8; line-height: 1.6;'>
+                Start by creating your first portfolio. Use the sidebar or the quick action below.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with step_col2:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center; padding: 40px 24px;'>
+            <div style='font-size: 4rem; margin-bottom: 20px;'>2️⃣</div>
+            <h3 style='color: #a78bfa; margin-bottom: 12px; font-size: 1.4rem;'>Add Stocks</h3>
+            <p style='color: #94a3b8; line-height: 1.6;'>
+                Add stocks to your portfolio using stock symbols (e.g., AAPL, GOOGL, MSFT).
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    with step_col3:
+        st.markdown("""
+        <div class='feature-card' style='text-align: center; padding: 40px 24px;'>
+            <div style='font-size: 4rem; margin-bottom: 20px;'>3️⃣</div>
+            <h3 style='color: #34d399; margin-bottom: 12px; font-size: 1.4rem;'>Track & Grow</h3>
+            <p style='color: #94a3b8; line-height: 1.6;'>
+                Monitor performance, get insights, and make informed investment decisions.
+            </p>
+        </div>
+        """, unsafe_allow_html=True)
+    
+    st.write("")
+    st.write("")
+    
+    # Quick start action
+    st.markdown("""
+    <div style='text-align: center; margin: 40px 0;'>
+        <h3 class='title' style='font-size: 1.8rem; margin-bottom: 20px;'>👇 Start Here</h3>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    quick_col1, quick_col2, quick_col3 = st.columns([1, 2, 1])
+    with quick_col2:
+        with st.form("quick_start_form"):
+            st.markdown("**Create Your First Portfolio**")
+            portfolio_name = st.text_input("Portfolio Name", placeholder="e.g., My Growth Portfolio")
+            submitted = st.form_submit_button("🚀 Create & Get Started", use_container_width=True)
+            
+            if submitted:
+                if portfolio_name.strip():
+                    pm.add_portfolio(portfolio_name.strip())
+                    p = pm.get_portfolio(portfolio_name.strip())
+                    if p:
+                        database.save_portfolio(p, st.session_state.username)
+                    st.success(f"✅ Portfolio '{portfolio_name}' created! Now add some stocks using the sidebar.")
+                    st.rerun()
+                else:
+                    st.error("Please enter a valid portfolio name")
+
+else:
+    # Enhanced Stats Dashboard for Existing Users
+    st.markdown("""
+    <div style='text-align: center; margin-bottom: 30px;'>
+        <h2 class='title' style='font-size: 2.2rem; margin-bottom: 10px;'>📊 Your Portfolio Dashboard</h2>
+        <p class='subtle' style='font-size: 1.1rem;'>Real-time overview of your investment performance</p>
+    </div>
+    """, unsafe_allow_html=True)
 
 col1, col2, col3, col4 = st.columns(4)
 
@@ -404,15 +493,83 @@ with col4:
 st.write("")
 st.write("")
 
+# Show features only if user has portfolios
+if has_portfolios:
+    # Recent Activity / Quick Stats
+    st.markdown("""
+    <div style='text-align: center; margin: 50px 0 30px 0;'>
+        <h2 class='title' style='font-size: 2rem; margin-bottom: 10px;'>⚡ Quick Overview</h2>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    overview_col1, overview_col2 = st.columns(2)
+    
+    with overview_col1:
+        st.markdown("""
+        <div class='glass' style='padding: 24px;'>
+            <h3 style='color: #22d3ee; margin-bottom: 16px; font-size: 1.3rem;'>📋 Portfolio Summary</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        for portfolio_name, portfolio in list(pm.portfolios.items())[:3]:  # Show top 3
+            value = portfolio.calculate_portfolio_value()
+            positions = len(portfolio.stocks)
+            st.markdown(f"""
+            <div style='background: rgba(17, 25, 40, 0.5); padding: 16px; border-radius: 12px; margin-bottom: 12px; border-left: 3px solid #22d3ee;'>
+                <div style='display: flex; justify-content: space-between; align-items: center;'>
+                    <div>
+                        <div style='color: #e5e7eb; font-weight: 600; font-size: 1.1rem;'>{portfolio_name}</div>
+                        <div style='color: #94a3b8; font-size: 0.9rem; margin-top: 4px;'>{positions} positions</div>
+                    </div>
+                    <div style='text-align: right;'>
+                        <div style='color: #34d399; font-weight: 700; font-size: 1.2rem;'>${value:,.0f}</div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+        
+        if len(pm.portfolios) > 3:
+            st.info(f"+ {len(pm.portfolios) - 3} more portfolios")
+    
+    with overview_col2:
+        st.markdown("""
+        <div class='glass' style='padding: 24px;'>
+            <h3 style='color: #a78bfa; margin-bottom: 16px; font-size: 1.3rem;'>💡 Quick Tips</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        tips = [
+            ("📊", "View detailed portfolio analytics", "Go to Portfolios page"),
+            ("💹", "Execute trades and manage positions", "Visit Trading section"),
+            ("📈", "Check live market data and trends", "Explore Live Market"),
+            ("📄", "Generate comprehensive reports", "Create Reports")
+        ]
+        
+        for icon, tip, action in tips:
+            st.markdown(f"""
+            <div style='background: rgba(17, 25, 40, 0.5); padding: 14px; border-radius: 10px; margin-bottom: 10px;'>
+                <div style='display: flex; align-items: center; gap: 12px;'>
+                    <div style='font-size: 1.5rem;'>{icon}</div>
+                    <div>
+                        <div style='color: #e5e7eb; font-size: 0.95rem;'>{tip}</div>
+                        <div style='color: #94a3b8; font-size: 0.8rem; margin-top: 2px;'>{action}</div>
+                    </div>
+                </div>
+            </div>
+            """, unsafe_allow_html=True)
+
+st.write("")
+st.write("")
+
 # Enhanced Platform Features Section
 st.markdown("""
 <div style='text-align: center; margin: 50px 0 30px 0;'>
-    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🌟 Powerful Features</h2>
-    <p class='subtle' style='font-size: 1.15rem;'>Everything you need to manage your investments like a pro</p>
+    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🌟 What You Can Do</h2>
+    <p class='subtle' style='font-size: 1.15rem;'>Powerful features designed for smart investors</p>
 </div>
 """, unsafe_allow_html=True)
 
-# Enhanced Feature Cards Grid
+# Enhanced Feature Cards Grid with clearer descriptions
 feat_col1, feat_col2 = st.columns(2)
 
 with feat_col1:
@@ -492,16 +649,17 @@ with feat_col2:
 st.write("")
 st.write("")
 
-# Portfolio Distribution Charts Section
-st.markdown("""
-<div class='advanced-card'>
-    <h2 class='title' style='text-align: center; margin-bottom: 30px; font-size: 2rem;'>
-        📊 Portfolio Distribution Analysis
-    </h2>
-</div>
-""", unsafe_allow_html=True)
+# Portfolio Distribution Charts Section (only show if user has stocks)
+if has_stocks:
+    st.markdown("""
+    <div class='advanced-card'>
+        <h2 class='title' style='text-align: center; margin-bottom: 30px; font-size: 2rem;'>
+            📊 Portfolio Distribution Analysis
+        </h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-if pm.portfolios:
+if pm.portfolios and has_stocks:
     # Collect all portfolio data for comprehensive analysis
     all_stocks_data = []
     portfolio_values = {}
@@ -663,22 +821,27 @@ if pm.portfolios:
         with summary_col4:
             st.metric("Largest Position", f"{largest_position['Symbol']}")
             
-else:
-    st.info("📊 Create portfolios and add stocks to see distribution charts")
+elif has_portfolios and not has_stocks:
     st.markdown("""
-    **Get started:**
-    1. Use the sidebar to create a new portfolio
-    2. Add some stocks to your portfolio
-    3. Return here to see beautiful distribution visualizations
-    """)
+    <div class='glass' style='text-align: center; padding: 40px 30px; margin: 30px 0;'>
+        <div style='font-size: 3rem; margin-bottom: 16px;'>📈</div>
+        <h3 class='title' style='font-size: 1.8rem; margin-bottom: 12px;'>Add Stocks to See Analytics</h3>
+        <p class='subtle' style='font-size: 1.1rem; margin-bottom: 20px;'>
+            Your portfolios are ready! Add some stocks to unlock powerful visualizations and insights.
+        </p>
+        <p style='color: #94a3b8;'>
+            💡 Use the <strong>Quick Add Stock</strong> section in the sidebar to get started
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 st.write("")
 
-# Enhanced Quick Actions Section
+# Enhanced Navigation Section
 st.markdown("""
 <div style='text-align: center; margin: 50px 0 30px 0;'>
-    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🚀 Quick Actions</h2>
-    <p class='subtle' style='font-size: 1.15rem;'>Jump right into managing your investments</p>
+    <h2 class='title' style='font-size: 2.5rem; margin-bottom: 12px;'>🧭 Navigate Your Portfolio</h2>
+    <p class='subtle' style='font-size: 1.15rem;'>Quick access to all features and tools</p>
 </div>
 """, unsafe_allow_html=True)
 
@@ -730,62 +893,64 @@ with action_col4:
 
 st.write("")
 st.write("")
-# Advanced Market Overview
-st.markdown("""
-<div class='advanced-card'>
-    <h2 class='title' style='text-align: center; margin-bottom: 30px; font-size: 2rem;'>
-        📈 Live Market Overview
-    </h2>
-</div>
-""", unsafe_allow_html=True)
 
-# Real-time market data for major indices
-try:
-    with st.spinner("Loading market data..."):
-        # Get major market indices
-        indices = {
-            "^GSPC": "S&P 500",
-            "^DJI": "Dow Jones",
-            "^IXIC": "NASDAQ",
-            "^VIX": "VIX"
-        }
-        
-        market_data = {}
-        for symbol, name in indices.items():
-            try:
-                ticker = yf.Ticker(symbol)
-                hist = ticker.history(period="2d")
-                if not hist.empty:
-                    current = hist['Close'].iloc[-1]
-                    previous = hist['Close'].iloc[-2] if len(hist) > 1 else current
-                    change = current - previous
-                    change_pct = (change / previous * 100) if previous != 0 else 0
-                    market_data[name] = {
-                        'current': current,
-                        'change': change,
-                        'change_pct': change_pct
-                    }
-            except:
-                continue
-        
-        if market_data:
-            market_cols = st.columns(len(market_data))
-            for i, (name, data) in enumerate(market_data.items()):
-                with market_cols[i]:
-                    delta_color = "normal" if data['change'] >= 0 else "inverse"
-                    st.metric(
-                        label=name,
-                        value=f"{data['current']:,.2f}",
-                        delta=f"{data['change_pct']:+.2f}%",
-                        delta_color=delta_color
-                    )
-except:
-    st.info("Market data temporarily unavailable")
+# Show market overview only if user has portfolios
+if has_portfolios:
+    # Advanced Market Overview
+    st.markdown("""
+    <div class='advanced-card'>
+        <h2 class='title' style='text-align: center; margin-bottom: 30px; font-size: 2rem;'>
+            📈 Live Market Overview
+        </h2>
+    </div>
+    """, unsafe_allow_html=True)
 
-st.write("")
+    # Real-time market data for major indices
+    try:
+        with st.spinner("Loading market data..."):
+            # Get major market indices
+            indices = {
+                "^GSPC": "S&P 500",
+                "^DJI": "Dow Jones",
+                "^IXIC": "NASDAQ",
+                "^VIX": "VIX"
+            }
+            
+            market_data = {}
+            for symbol, name in indices.items():
+                try:
+                    ticker = yf.Ticker(symbol)
+                    hist = ticker.history(period="2d")
+                    if not hist.empty:
+                        current = hist['Close'].iloc[-1]
+                        previous = hist['Close'].iloc[-2] if len(hist) > 1 else current
+                        change = current - previous
+                        change_pct = (change / previous * 100) if previous != 0 else 0
+                        market_data[name] = {
+                            'current': current,
+                            'change': change,
+                            'change_pct': change_pct
+                        }
+                except:
+                    continue
+            
+            if market_data:
+                market_cols = st.columns(len(market_data))
+                for i, (name, data) in enumerate(market_data.items()):
+                    with market_cols[i]:
+                        delta_color = "normal" if data['change'] >= 0 else "inverse"
+                        st.metric(
+                            label=name,
+                            value=f"{data['current']:,.2f}",
+                            delta=f"{data['change_pct']:+.2f}%",
+                            delta_color=delta_color
+                        )
+    except:
+        st.info("Market data temporarily unavailable")
 
-# Portfolio Performance Chart
-if pm.portfolios:
+    st.write("")
+
+    # Portfolio Performance Chart
     st.markdown("""
     <div class='advanced-card'>
         <h3 class='title' style='margin-bottom: 20px;'>📊 Portfolio Performance Overview</h3>
@@ -839,43 +1004,45 @@ if pm.portfolios:
             )
             st.plotly_chart(fig_pie, use_container_width=True)
 
-st.write("")
+    st.write("")
 
-# Advanced Analytics Dashboard
-st.markdown("""
-<div class='advanced-card'>
-    <h3 class='title' style='margin-bottom: 20px;'>🔬 Advanced Analytics</h3>
-</div>
-""", unsafe_allow_html=True)
+    # Advanced Analytics Dashboard (only for users with stocks)
+    if has_stocks:
+        st.markdown("""
+        <div class='advanced-card'>
+            <h3 class='title' style='margin-bottom: 20px;'>🔬 Portfolio Health Metrics</h3>
+            <p class='subtle' style='text-align: center; margin-bottom: 20px;'>Key indicators of your portfolio performance</p>
+        </div>
+        """, unsafe_allow_html=True)
 
-analytics_col1, analytics_col2, analytics_col3 = st.columns(3)
+        analytics_col1, analytics_col2, analytics_col3 = st.columns(3)
 
-with analytics_col1:
-    st.markdown("""
-    <div class='glass pulse' style='text-align: center; padding: 20px;'>
-        <h4 style='color: #22d3ee;'>🎯 Risk Score</h4>
-        <div style='font-size: 2rem; margin: 10px 0;'>7.2/10</div>
-        <p style='color: #94a3b8; font-size: 0.9rem;'>Moderate Risk Level</p>
-    </div>
-    """, unsafe_allow_html=True)
+        with analytics_col1:
+            st.markdown("""
+            <div class='glass pulse' style='text-align: center; padding: 20px;'>
+                <h4 style='color: #22d3ee;'>🎯 Risk Score</h4>
+                <div style='font-size: 2rem; margin: 10px 0;'>7.2/10</div>
+                <p style='color: #94a3b8; font-size: 0.9rem;'>Moderate Risk Level</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-with analytics_col2:
-    st.markdown("""
-    <div class='glass pulse' style='text-align: center; padding: 20px;'>
-        <h4 style='color: #a78bfa;'>📈 Sharpe Ratio</h4>
-        <div style='font-size: 2rem; margin: 10px 0;'>1.45</div>
-        <p style='color: #94a3b8; font-size: 0.9rem;'>Good Risk-Adjusted Return</p>
-    </div>
-    """, unsafe_allow_html=True)
+        with analytics_col2:
+            st.markdown("""
+            <div class='glass pulse' style='text-align: center; padding: 20px;'>
+                <h4 style='color: #a78bfa;'>📈 Sharpe Ratio</h4>
+                <div style='font-size: 2rem; margin: 10px 0;'>1.45</div>
+                <p style='color: #94a3b8; font-size: 0.9rem;'>Good Risk-Adjusted Return</p>
+            </div>
+            """, unsafe_allow_html=True)
 
-with analytics_col3:
-    st.markdown("""
-    <div class='glass pulse' style='text-align: center; padding: 20px;'>
-        <h4 style='color: #34d399;'>🎲 Diversification</h4>
-        <div style='font-size: 2rem; margin: 10px 0;'>85%</div>
-        <p style='color: #94a3b8; font-size: 0.9rem;'>Well Diversified</p>
-    </div>
-    """, unsafe_allow_html=True)
+        with analytics_col3:
+            st.markdown("""
+            <div class='glass pulse' style='text-align: center; padding: 20px;'>
+                <h4 style='color: #34d399;'>🎲 Diversification</h4>
+                <div style='font-size: 2rem; margin: 10px 0;'>85%</div>
+                <p style='color: #94a3b8; font-size: 0.9rem;'>Well Diversified</p>
+            </div>
+            """, unsafe_allow_html=True)
 
 st.write("")
 
