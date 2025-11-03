@@ -63,6 +63,7 @@ with st.sidebar:
     st.page_link("pages/1_📊_Portfolios.py", label="📊 Portfolios", icon="📊")
     st.page_link("pages/2_💹_Trading.py", label="💹 Trading", icon="💹")
     st.page_link("pages/3_📈_Live_Market.py", label="📈 Live Market", icon="📈")
+    st.page_link("pages/6_📊_Charts.py", label="📊 Charts", icon="📊")
     st.page_link("pages/4_📄_Reports.py", label="📄 Reports", icon="📄")
     st.page_link("pages/5_ℹ️_About.py", label="ℹ️ About", icon="ℹ️")
 
